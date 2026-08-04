@@ -1,0 +1,46 @@
+name: haciendo
+description: Haciendo - proceso en fotos. Galerías locales de progreso para Android.
+publish_to: "none"
+version: 0.1.3+4
+
+environment:
+  sdk: ">=3.4.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  cupertino_icons: ^1.0.8
+  sqflite: ^2.4.3
+  path: ^1.9.1
+  image_picker: 1.2.0
+  image_picker_android: 0.8.13+1
+  flutter_plugin_android_lifecycle: 2.0.33
+  # Pinned with its Android implementation to preserve Android API 21.
+  camera: 0.11.2+1
+  camera_android_camerax: 0.6.20+3
+  file_picker: 8.3.7
+  google_mobile_ads: 5.3.1
+  webview_flutter_android: 4.10.1
+  flutter_local_notifications: 19.5.0
+  timezone: ^0.10.1
+  archive: ^4.0.9
+  pdf: 3.12.0
+  image: ^4.5.4
+  crypto: ^3.0.6
+  uuid: ^4.5.1
+
+  # Intentionally no share_plus or path_provider. The latest versions no
+  # longer preserve this project's Android API 21 guarantee. Native Android
+  # channels provide app directories and sharing instead.
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/branding/

@@ -1,0 +1,4 @@
+storePassword=CAMBIAR
+keyPassword=CAMBIAR
+keyAlias=haciendo
+storeFile=../keystore/haciendo-upload.jks

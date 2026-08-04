@@ -1,0 +1,51 @@
+{
+  "project": {
+    "name": "Haciendo: proceso en fotos",
+    "developer": "Enmanuel Apps",
+    "package": "com.enmanuelapp.haciendo",
+    "platform": "Flutter para Android",
+    "minSdk": 21,
+    "compileSdk": 36,
+    "targetSdk": 36,
+    "localOnly": true
+  },
+  "nonNegotiableRules": [
+    "No elevar minSdk por encima de 21",
+    "No añadir cuenta, Firebase, servidor ni sincronización automática",
+    "No cargar galerías completas en memoria; usar paginación y miniaturas",
+    "No mostrar anuncios en cámara, secuencia, PIN, presentación o exportaciones",
+    "No usar IDs reales de banner durante debug"
+  ],
+  "languages": ["es", "en", "pt", "fr", "de"],
+  "projectStates": ["idea", "inProgress", "paused", "completed", "archived"],
+  "pdfModes": ["history", "tutorial", "album", "beforeAfter"],
+  "admob": {
+    "applicationId": "ca-app-pub-3322493998376707~6272582654",
+    "releaseBannerId": "ca-app-pub-3322493998376707/2990833259",
+    "debugBannerId": "ca-app-pub-3940256099942544/6300978111",
+    "placement": "anchored adaptive bottom banner"
+  },
+  "data": {
+    "database": "SQLite",
+    "images": "private app files",
+    "originalsDefault": true,
+    "backupManifest": "backup.json",
+    "backupFormat": "com.enmanuelapp.haciendo.backup"
+  },
+  "sequenceMode": [
+    "camera capture",
+    "previous-frame onion skin",
+    "reorder",
+    "duplicate",
+    "delete",
+    "preview",
+    "numbered frame ZIP export"
+  ],
+  "readFirst": [
+    "CODEX_START_HERE.md",
+    "PROJECT_CONTEXT.md",
+    "AGENTS.md",
+    "docs/ARCHITECTURE.md",
+    "PENDING.md"
+  ]
+}
