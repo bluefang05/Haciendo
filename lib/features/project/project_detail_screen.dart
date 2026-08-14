@@ -456,8 +456,7 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
               ListTile(
                 leading: const Icon(Icons.compress_outlined),
                 title: Text(context.l10n.t('shareCompressedPhotos')),
-                subtitle:
-                    Text(context.l10n.t('shareCompressedPhotosSubtitle')),
+                subtitle: Text(context.l10n.t('shareCompressedPhotosSubtitle')),
                 onTap: () => Navigator.pop(
                   context,
                   ProcessShareQuality.compressed,
@@ -739,63 +738,76 @@ class _EntryCard extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(bottom: 14),
       child: Card(
-        child: InkWell(
-          borderRadius: BorderRadius.circular(20),
-          onTap: onEdit,
-          child: Padding(
-            padding: const EdgeInsets.all(14),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    if (entry.isMilestone) const Icon(Icons.star, size: 20),
-                    if (entry.isMilestone) const SizedBox(width: 6),
-                    Expanded(
-                      child: Text(
-                        progressEntryTitle(entry, entryIndex),
-                        style: Theme.of(context).textTheme.titleMedium,
+        child: Padding(
+          padding: const EdgeInsets.all(14),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  if (entry.isMilestone) const Icon(Icons.star, size: 20),
+                  if (entry.isMilestone) const SizedBox(width: 6),
+                  Expanded(
+                    child: Text(
+                      progressEntryTitle(entry, entryIndex),
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
+                  ),
+                  if (entry.isPrivate)
+                    const Icon(Icons.visibility_off_outlined, size: 19),
+                  if (entry.isSequence)
+                    const Icon(Icons.movie_outlined, size: 19),
+                  PopupMenuButton<String>(
+                    onSelected: (value) {
+                      if (value == 'edit') onEdit();
+                      if (value == 'delete') onDelete();
+                    },
+                    itemBuilder: (context) => [
+                      PopupMenuItem(
+                        value: 'edit',
+                        child: Text(context.l10n.t('edit')),
                       ),
-                    ),
-                    if (entry.isPrivate)
-                      const Icon(Icons.visibility_off_outlined, size: 19),
-                    if (entry.isSequence)
-                      const Icon(Icons.movie_outlined, size: 19),
-                    PopupMenuButton<String>(
-                      onSelected: (value) {
-                        if (value == 'delete') onDelete();
-                      },
-                      itemBuilder: (context) => [
-                        PopupMenuItem(
-                          value: 'delete',
-                          child: Text(context.l10n.t('delete')),
+                      PopupMenuItem(
+                        value: 'delete',
+                        child: Text(context.l10n.t('delete')),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              Text(
+                '${entry.takenAt.day}/${entry.takenAt.month}/${entry.takenAt.year}',
+                style: Theme.of(context).textTheme.labelSmall,
+              ),
+              if (entry.description.isNotEmpty) ...[
+                const SizedBox(height: 8),
+                Text(entry.description),
+              ],
+              if (entry.materials.isNotEmpty) ...[
+                const SizedBox(height: 6),
+                Text('${context.l10n.t('materials')}: ${entry.materials}',
+                    style: Theme.of(context).textTheme.bodySmall),
+              ],
+              if (photos.isNotEmpty) ...[
+                const SizedBox(height: 12),
+                SizedBox(
+                  height: 130,
+                  child: ListView.separated(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: photos.length,
+                    separatorBuilder: (_, __) => const SizedBox(width: 8),
+                    itemBuilder: (context, index) => InkWell(
+                      borderRadius: BorderRadius.circular(14),
+                      onTap: () => Navigator.of(context).push(
+                        MaterialPageRoute<void>(
+                          fullscreenDialog: true,
+                          builder: (_) => _EntryPhotoViewer(
+                            photos: photos,
+                            initialIndex: index,
+                          ),
                         ),
-                      ],
-                    ),
-                  ],
-                ),
-                Text(
-                  '${entry.takenAt.day}/${entry.takenAt.month}/${entry.takenAt.year}',
-                  style: Theme.of(context).textTheme.labelSmall,
-                ),
-                if (entry.description.isNotEmpty) ...[
-                  const SizedBox(height: 8),
-                  Text(entry.description),
-                ],
-                if (entry.materials.isNotEmpty) ...[
-                  const SizedBox(height: 6),
-                  Text('${context.l10n.t('materials')}: ${entry.materials}',
-                      style: Theme.of(context).textTheme.bodySmall),
-                ],
-                if (photos.isNotEmpty) ...[
-                  const SizedBox(height: 12),
-                  SizedBox(
-                    height: 130,
-                    child: ListView.separated(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: photos.length,
-                      separatorBuilder: (_, __) => const SizedBox(width: 8),
-                      itemBuilder: (context, index) => ClipRRect(
+                      ),
+                      child: ClipRRect(
                         borderRadius: BorderRadius.circular(14),
                         child: Image.file(
                           File(photos[index].thumbnailPath),
@@ -814,11 +826,78 @@ class _EntryCard extends StatelessWidget {
                       ),
                     ),
                   ),
-                ],
+                ),
               ],
-            ),
+            ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+class _EntryPhotoViewer extends StatefulWidget {
+  const _EntryPhotoViewer({
+    required this.photos,
+    required this.initialIndex,
+  });
+
+  final List<PhotoItem> photos;
+  final int initialIndex;
+
+  @override
+  State<_EntryPhotoViewer> createState() => _EntryPhotoViewerState();
+}
+
+class _EntryPhotoViewerState extends State<_EntryPhotoViewer> {
+  late final PageController _controller;
+  late int _index;
+
+  @override
+  void initState() {
+    super.initState();
+    _index = widget.initialIndex;
+    _controller = PageController(initialPage: _index);
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.black,
+      appBar: AppBar(
+        backgroundColor: Colors.black,
+        foregroundColor: Colors.white,
+        title: Text('${_index + 1} / ${widget.photos.length}'),
+      ),
+      body: PageView.builder(
+        controller: _controller,
+        itemCount: widget.photos.length,
+        onPageChanged: (value) => setState(() => _index = value),
+        itemBuilder: (context, index) {
+          final photo = widget.photos[index];
+          return InteractiveViewer(
+            minScale: .8,
+            maxScale: 5,
+            child: Center(
+              child: Image.file(
+                File(photo.displayPath),
+                fit: BoxFit.contain,
+                gaplessPlayback: true,
+                errorBuilder: (_, __, ___) => const Icon(
+                  Icons.broken_image_outlined,
+                  color: Colors.white70,
+                  size: 56,
+                ),
+              ),
+            ),
+          );
+        },
       ),
     );
   }

@@ -2,6 +2,9 @@
 
 ## Cambios locales pendientes
 
+- Version actualizada a `0.1.5+6` para publicar un AAB nuevo con Android `minSdk 21` fijado explicitamente.
+- Version actualizada a `0.1.4+5` para publicar un AAB nuevo con visor full screen de fotos en los pasos.
+- Las fotos de cada paso ahora se abren en pantalla completa al tocarlas; editar queda en el menu de tres puntos.
 - Paquete Android alineado con Google Play: `com.enmanuelapps.haciendo`; los respaldos antiguos con el identificador previo siguen siendo aceptados al importar.
 - Version actualizada a `0.1.3+4` para publicar un AAB nuevo tras corregir el paquete.
 - Version actualizada a `0.1.2+3` y AAB configurado con clave local de subida para Google Play.
